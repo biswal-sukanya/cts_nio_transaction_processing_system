@@ -14,7 +14,6 @@ public class TransactionRequest {
 	private TransactionType type;
 	private BigDecimal amount;
 	private LocalDate transactionDate;
-	private TransactionStatus transactionStatus;
 	private String remark;
 	
 	public TransactionRequest() {
