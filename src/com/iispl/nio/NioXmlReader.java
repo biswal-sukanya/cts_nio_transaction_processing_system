@@ -1,6 +1,7 @@
 
 package com.iispl.nio;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.math.BigDecimal;
@@ -36,172 +37,152 @@ import com.iispl.service.ValidationService;
 public class NioXmlReader {
 	
 
-	    private static final int BUFFER_SIZE = 1024;
+	private static final int BUFFER_SIZE = 1024;
 
-	    public String readXml(Path filePath) throws IOException, InvalidInputFileException {
+	private ValidationService validationService = new ValidationService();
 
-	        validateFile(filePath);
+	public List<TransactionRequest> readXml(Path filePath,
+			String fileCorporateId) throws Exception {
 
-	        StringBuilder xmlContent = new StringBuilder();
+		String xmlContent = readFile(filePath);
 
-	        try (FileChannel fileChannel = FileChannel.open(filePath, StandardOpenOption.READ)) {
+		return parseTransactions(xmlContent, fileCorporateId);
 
-	            ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
+	}
 
-	            while (fileChannel.read(buffer) != -1) {
+	private String readFile(Path filePath)
+			throws IOException, InvalidInputFileException {
 
-	                buffer.flip();
+		validateFile(filePath);
 
-	                xmlContent.append(StandardCharsets.UTF_8.decode(buffer));
+		StringBuilder xmlContent = new StringBuilder();
 
-	                buffer.clear();
-	            }
-	        }
+		try (FileChannel fileChannel = FileChannel.open(filePath,
+				StandardOpenOption.READ)) {
 
-	        return xmlContent.toString();
-	    }
+			ByteBuffer buffer =	ByteBuffer.allocate(BUFFER_SIZE);
 
-	    private static void validateFile(Path filePath) throws InvalidInputFileException, IOException {
+			while (fileChannel.read(buffer) != -1) {
 
-	        if (filePath == null) {
-	            throw new InvalidInputFileException();
-	        }
+				buffer.flip();
 
-	        if (!Files.exists(filePath)) {
-	            throw new InvalidInputFileException();
-	        }
+				xmlContent.append(StandardCharsets.UTF_8.decode(buffer));
 
-	        if (!Files.isRegularFile(filePath)) {
-	            throw new InvalidInputFileException();
-	        }
+				buffer.clear();
+			}
 
-	        if (!Files.isReadable(filePath)) {
-	            throw new InvalidInputFileException();
-	        }
+		}
 
-	        if (!filePath.toString().toLowerCase().endsWith(".xml")) {
-	            throw new InvalidInputFileException();
-	        }
+		return xmlContent.toString();
 
-	        if (Files.size(filePath) == 0) {
-	            throw new InvalidInputFileException();
-	        }
-	    }
-	    public List<TransactionRequest> parseTransactions(String xmlContent)
-	            throws InvalidXmlStructureException, InvalidTransactionException {
-	    	
-	    	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	}
 
-	    	DocumentBuilder builder;
+	private List<TransactionRequest> parseTransactions(
+			String xmlContent,
+			String fileCorporateId)
+			throws Exception {
 
-	    	try {
-	    	    builder = factory.newDocumentBuilder();
-	    	} catch (ParserConfigurationException e) {
-	    	    throw new InvalidXmlStructureException();
-	    	}
-	    	
-	    	Document document;
+		List<TransactionRequest> transactionList = new ArrayList<>();
 
-	    	try {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-	    	    InputSource inputSource = new InputSource(new StringReader(xmlContent));
+		DocumentBuilder builder = factory.newDocumentBuilder();
 
-	    	    document = builder.parse(inputSource);
+		Document document = builder.parse(new ByteArrayInputStream(
+								xmlContent.getBytes(StandardCharsets.UTF_8)));
 
-	    	    document.getDocumentElement().normalize();
+		document.getDocumentElement().normalize();
 
-	    	} catch (SAXException | IOException e) {
-	    	    throw new InvalidXmlStructureException();
-	    	}
-	    	// Get the root element
-	    	Element rootElement = document.getDocumentElement();
+		Element root = document.getDocumentElement();
 
-	    	// Read root attributes
-	    	String batchId = rootElement.getAttribute("batchId");
-	    	String corporateId = rootElement.getAttribute("corporateId");
-	    	
-	    
-	    	
-	    	NodeList transactionNodes = document.getElementsByTagName("transaction");
-	    	
-	    	List<TransactionRequest> transactionList = new ArrayList<>();
-	    	ValidationService validationService = new ValidationService();
-	    	
-	    	for (int i = 0; i < transactionNodes.getLength(); i++) {
+		String xmlCorporateId =	root.getAttribute("corporateId");
 
-	    	    Node node = transactionNodes.item(i);
+		NodeList transactionNodes =	root.getElementsByTagName("transaction");
 
-	    	    if (node.getNodeType() == Node.ELEMENT_NODE) {
+		for (int index = 0;index < transactionNodes.getLength();index++) {
 
-	    	        Element transactionElement = (Element) node;
+			Node node = transactionNodes.item(index);
 
-	    	        String transactionId = transactionElement.getElementsByTagName("transactionId")
-	    	                .item(0).getTextContent();
+			if (node.getNodeType()	== Node.ELEMENT_NODE) {
 
-	    	        String fromAccount = transactionElement.getElementsByTagName("fromAccount")
-	    	                .item(0).getTextContent();
+				Element transactionElement =(Element) node;
 
-	    	        String toAccount = transactionElement.getElementsByTagName("toAccount")
-	    	                .item(0).getTextContent();
+				TransactionRequest request =	new TransactionRequest();
 
-	    	        String typeStr = transactionElement.getElementsByTagName("type")
-	    	                .item(0).getTextContent();
+				request.setTransactionId(	transactionElement
+								.getElementsByTagName("transactionId")
+								.item(0)
+								.getTextContent());
 
-	    	        String amountStr = transactionElement.getElementsByTagName("amount")
-	    	                .item(0).getTextContent();
+				request.setFromAccount(transactionElement
+								.getElementsByTagName("fromAccount")
+								.item(0)
+								.getTextContent());
 
-	    	        String dateStr = transactionElement.getElementsByTagName("transactionDate")
-	    	                .item(0).getTextContent();
+				request.setToAccount(transactionElement
+								.getElementsByTagName("toAccount")
+								.item(0)
+								.getTextContent());
 
-	    	       
-	    	        NodeList remarksNode = transactionElement.getElementsByTagName("remarks");
-	    	        String remark = (remarksNode.getLength() > 0) 
-	    	                ? remarksNode.item(0).getTextContent() 
-	    	                : "";
+				request.setType(TransactionType.valueOf(
+								transactionElement
+										.getElementsByTagName("type")
+										.item(0)
+										.getTextContent()));
 
-	    	     
+				request.setAmount(new BigDecimal(
+								transactionElement
+										.getElementsByTagName("amount")
+										.item(0)
+										.getTextContent()));
 
-	    	        // --- type conversion ---
-	    	        BigDecimal amount;
-	    	        try {
-	    	            amount = new BigDecimal(amountStr.trim());
-	    	        } catch (NumberFormatException e) {
-	    	            throw new InvalidTransactionException(
-	    	                    );
-	    	        }
+				request.setTransactionDate(LocalDate.parse(
+								transactionElement
+										.getElementsByTagName("transactionDate")
+										.item(0)
+										.getTextContent()));
 
-	    	      
+				request.setRemark(transactionElement
+								.getElementsByTagName("remarks")
+								.item(0)
+								.getTextContent());
 
-	    	        LocalDate transactionDate;
-	    	        try {
-	    	            transactionDate = LocalDate.parse(dateStr.trim());
-	    	        } catch (DateTimeParseException e) {
-	    	            throw new InvalidTransactionException(
-	    	                    );
-	    	        }
-	    	        TransactionType type;
-	    	        try {
-	    	            type = TransactionType.valueOf(typeStr.trim().toUpperCase());
-	    	        } catch (IllegalArgumentException e) {
-	    	            throw new InvalidTransactionException();
-	    	        }
+				validationService.validateTransaction(request,fileCorporateId,
+						xmlCorporateId);
 
-	    	      
-	    	        TransactionRequest txn = new TransactionRequest(
-	    	                transactionId, fromAccount, toAccount, type, amount, transactionDate, remark);
-	    	        
-	    	        
-	    	        validationService.validateTransaction(
-	    	                txn,
-	    	                corporateId
-	    	        );
+				transactionList.add(request);
 
-	    	        transactionList.add(txn);
-	    	    }
-	    	}
+			}
 
-	    	return transactionList; 	
-	    }
+		}
+
+		return transactionList;
+
+	}
+
+	private void validateFile(Path filePath) throws IOException,InvalidInputFileException {
+
+		if (filePath == null) {
+			throw new InvalidInputFileException();
+		}
+
+		if (!java.nio.file.Files.exists(filePath)) {
+			throw new InvalidInputFileException();
+		}
+
+		if (!java.nio.file.Files.isRegularFile(filePath)) {
+			throw new InvalidInputFileException();
+		}
+
+		if (!java.nio.file.Files.isReadable(filePath)) {
+			throw new InvalidInputFileException();
+		}
+
+		if (java.nio.file.Files.size(filePath) == 0) {
+			throw new InvalidInputFileException();
+		}
+
+	}
 
 
 }
