@@ -8,7 +8,7 @@ bin/
 # Compiled Java files
 *.class
 
-# Logs
+# Log files
 *.log
 
 # OS files
