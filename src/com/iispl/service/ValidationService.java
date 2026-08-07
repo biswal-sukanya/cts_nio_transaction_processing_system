@@ -80,18 +80,10 @@ public class ValidationService {
 
 	    }
 
-	    public void validateCorporateId(String fileCorporateId,
-	            String xmlCorporateId)
-	            throws InvalidTransactionException {
-
-	        if (!fileCorporateId.equals(xmlCorporateId)) {
-	            throw new InvalidTransactionException();
-	        }
-
-	    }
+	 
 
 	    public void validateTransaction(TransactionRequest transaction,
-	            String fileCorporateId,
+	    
 	            String xmlCorporateId)
 	            throws InvalidTransactionException,
 	            InvalidXmlStructureException {
@@ -110,7 +102,7 @@ public class ValidationService {
 
 	        validateTransactionDate(transaction.getTransactionDate());
 
-	        validateCorporateId(fileCorporateId, xmlCorporateId);
+	        
 
 	    }
 	

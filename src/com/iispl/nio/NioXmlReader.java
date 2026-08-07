@@ -31,6 +31,7 @@ import com.iispl.exception.InvalidInputFileException;
 import com.iispl.exception.InvalidTransactionException;
 import com.iispl.exception.InvalidXmlStructureException;
 import com.iispl.model.TransactionRequest;
+import com.iispl.service.ValidationService;
 
 public class NioXmlReader {
 	
@@ -119,12 +120,12 @@ public class NioXmlReader {
 	    	String batchId = rootElement.getAttribute("batchId");
 	    	String corporateId = rootElement.getAttribute("corporateId");
 	    	
-	    	batchId      = "BATCH001";
-	    	corporateId  = "CORP101";
+	    
 	    	
 	    	NodeList transactionNodes = document.getElementsByTagName("transaction");
 	    	
 	    	List<TransactionRequest> transactionList = new ArrayList<>();
+	    	ValidationService validationService = new ValidationService();
 	    	
 	    	for (int i = 0; i < transactionNodes.getLength(); i++) {
 
@@ -158,16 +159,7 @@ public class NioXmlReader {
 	    	                ? remarksNode.item(0).getTextContent() 
 	    	                : "";
 
-	    	        // --- basic validation  ---
-	    	        if (transactionId == null || transactionId.isBlank()
-	    	                || fromAccount == null || fromAccount.isBlank()
-	    	                || toAccount == null || toAccount.isBlank()
-	    	                || typeStr == null || typeStr.isBlank()
-	    	                || amountStr == null || amountStr.isBlank()
-	    	                || dateStr == null || dateStr.isBlank()) {
-	    	            throw new InvalidTransactionException();
-	    	                   
-	    	        }
+	    	     
 
 	    	        // --- type conversion ---
 	    	        BigDecimal amount;
@@ -178,10 +170,7 @@ public class NioXmlReader {
 	    	                    );
 	    	        }
 
-	    	        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-	    	            throw new InvalidTransactionException(
-	    	                    );
-	    	        }
+	    	      
 
 	    	        LocalDate transactionDate;
 	    	        try {
@@ -200,17 +189,18 @@ public class NioXmlReader {
 	    	      
 	    	        TransactionRequest txn = new TransactionRequest(
 	    	                transactionId, fromAccount, toAccount, type, amount, transactionDate, remark);
+	    	        
+	    	        
+	    	        validationService.validateTransaction(
+	    	                txn,
+	    	                corporateId
+	    	        );
 
 	    	        transactionList.add(txn);
 	    	    }
 	    	}
 
-	    	return transactionList;
-	    
-	    	
-	    	
-	    	
-	    	
+	    	return transactionList; 	
 	    }
 
 
