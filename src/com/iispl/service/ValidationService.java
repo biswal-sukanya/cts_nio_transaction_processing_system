@@ -90,7 +90,7 @@ public class ValidationService {
 			String xmlCorporateId)
 			throws InvalidTransactionException {
 
-		if (!fileCorporateId.equals(xmlCorporateId)) {
+		if (!fileCorporateId.equalsIgnoreCase(xmlCorporateId)) {
 			throw new InvalidTransactionException();
 		}
 

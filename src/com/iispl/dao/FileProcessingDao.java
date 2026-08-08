@@ -4,6 +4,6 @@ import com.iispl.model.FileProcessingSummary;
 
 public interface FileProcessingDao {
 
-	boolean saveFileProcessingSummary(FileProcessingSummary fileProcessingSummary);
+	boolean saveFileProcessingSummary(String batchId,String fileName,FileProcessingSummary summary);
 	
 }
