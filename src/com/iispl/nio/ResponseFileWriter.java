@@ -18,76 +18,59 @@ public class ResponseFileWriter {
 
     private static final Path OUTPUT_FOLDER = Paths.get("data", "output");
 
-    public void writeResponseFile(String originalFileName,
-                                  List<TransactionResult> results)
-            throws IOException {
+    public void writeResponseFile(String batchId,String originalFileName,List<TransactionResult> results) throws IOException {
 
-        Files.createDirectories(OUTPUT_FOLDER);
+      Files.createDirectories(OUTPUT_FOLDER);
 
-        String responseFileName = "RESP_" + originalFileName;
+      String responseFileName = "RESP_" + originalFileName;
 
-        Path responsePath = OUTPUT_FOLDER.resolve(responseFileName);
+      Path responsePath = OUTPUT_FOLDER.resolve(responseFileName);
 
-        StringBuilder xml = new StringBuilder();
+       StringBuilder xml = new StringBuilder();
 
-        xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        xml.append("<response>\n");
+       xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
-        for (TransactionResult result : results) {
- 
-            xml.append("\t<transaction>\n");
+       xml.append("<response batchId=\"").append(batchId).append("\">\n");
 
-            xml.append("\t\t<transactionId>")
-                    .append(result.getTransactionId())
-                    .append("</transactionId>\n");
+             for (TransactionResult result : results) {
 
-            xml.append("\t\t<status>")
-                    .append(result.getStatus())
-                    .append("</status>\n");
+                   xml.append("\t<transaction>\n");
 
-            xml.append("\t\t<failureCode>")
-                    .append(result.getFailureCode() == null ? "" : result.getFailureCode())
-                    .append("</failureCode>\n");
+                   xml.append("\t\t<transactionId>").append(result.getTransactionId()).append("</transactionId>\n");
 
-            xml.append("\t\t<failureReason>")
-                    .append(result.getFailureReason() == null ? "" : result.getFailureReason())
-                    .append("</failureReason>\n");
+                   xml.append("\t\t<status>").append(result.getStatus()).append("</status>\n");
 
-            xml.append("\t</transaction>\n");
-        }
+                   xml.append("\t\t<failureCode>").append(result.getFailureCode() == null ? "": result.getFailureCode()).append("</failureCode>\n");
 
-        xml.append("</response>");
+                   xml.append("\t\t<failureReason>").append(result.getFailureReason() == null ? "": result.getFailureReason()).append("</failureReason>\n");
 
-        ByteBuffer buffer =
-                ByteBuffer.wrap(xml.toString().getBytes(StandardCharsets.UTF_8));
+                   xml.append("\t</transaction>\n");
+}
 
-        try (FileChannel channel = FileChannel.open(
-                responsePath,
-                StandardOpenOption.CREATE,
-                StandardOpenOption.WRITE,
-                StandardOpenOption.TRUNCATE_EXISTING)) {
+                   xml.append("</response>");
 
-            channel.write(buffer);
-        }
+                  ByteBuffer buffer =ByteBuffer.wrap(xml.toString().getBytes(StandardCharsets.UTF_8));
 
-        System.out.println("Response XML Created Successfully.");
+                 try (FileChannel channel = FileChannel.open(responsePath,StandardOpenOption.CREATE,StandardOpenOption.WRITE,StandardOpenOption.TRUNCATE_EXISTING)) {
 
-        BasicFileAttributes attributes =
-                Files.readAttributes(responsePath, BasicFileAttributes.class);
+                  channel.write(buffer);
+}
 
-        System.out.println("Response File Size : " + attributes.size() + " bytes");
-        System.out.println("Last Modified      : " + attributes.lastModifiedTime());
-    }
+                 System.out.println("Response XML Created Successfully.");
 
-    public void writeSummaryFile(String originalFileName,
-                                 FileProcessingSummary summary)
-            throws IOException {
+                 BasicFileAttributes attributes =Files.readAttributes(responsePath,BasicFileAttributes.class);
 
-        Files.createDirectories(OUTPUT_FOLDER);
+                 System.out.println("Response File Size : "+ attributes.size() + " bytes");
 
-        String summaryFileName = "SUMMARY_" + originalFileName.replace(".xml", ".txt");
+                 System.out.println("Last Modified      : "+ attributes.lastModifiedTime());
+}
+               public void writeSummaryFile(String originalFileName,FileProcessingSummary summary) throws IOException {
 
-        Path summaryPath = OUTPUT_FOLDER.resolve(summaryFileName);
+                Files.createDirectories(OUTPUT_FOLDER);
+
+                String summaryFileName = "SUMMARY_" + originalFileName.replace(".xml", ".txt");
+
+                Path summaryPath = OUTPUT_FOLDER.resolve(summaryFileName);
 
         List<String> lines = List.of(
                 "CTS BULK TRANSACTION PROCESSING SUMMARY",
@@ -99,8 +82,7 @@ public class ResponseFileWriter {
                 "Archived           : " + summary.isArchived()
         );
 
-        Files.write(summaryPath,
-                lines,
+        Files.write(summaryPath,lines,
                 StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING);

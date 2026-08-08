@@ -23,7 +23,7 @@ public class FileIntakeService {
 		Files.createDirectories(processing);
 	}
 	
-	public Path getProcessedFile() throws IOException, InvalidFileNameException,InvalidInputFileException{
+	public Path getFileForProcessing() throws IOException, InvalidFileNameException,InvalidInputFileException{
 		try(DirectoryStream<Path> stream=Files.newDirectoryStream(incoming,"*.xml")){
 			for(Path file:stream) {
 				BasicFileAttributes attribute=Files.readAttributes(file,BasicFileAttributes.class);
