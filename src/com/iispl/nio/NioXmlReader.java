@@ -152,7 +152,7 @@ public class NioXmlReader {
 	                	System.out.println(e.getMessage());
 	                   
 
-	                    continue;
+	            
 	                }
 
 	            }
