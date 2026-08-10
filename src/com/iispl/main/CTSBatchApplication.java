@@ -49,11 +49,38 @@ public class CTSBatchApplication {
 
 			   String originalFileName =  processedFile.getFileName().toString();
 
-			   List<TransactionRequest> requests =  reader.readXml(processedFile,corporateId);
+			   List<TransactionRequest> requests =  reader.readXml(processedFile, corporateId);
 
-			   List<TransactionResult> results = transactionService.processTransactions(batchId,requests);
+				List<TransactionResult> results = transactionService.processTransactions(batchId, requests);
 
-			   FileProcessingSummary summary = new FileProcessingSummary();
+
+				
+				// 3. DATABASE UPDATE
+
+				System.out.println();
+				System.out.println("------------------------------------------------------------");
+				System.out.println("3. Database Update");
+				System.out.println("------------------------------------------------------------");
+
+				System.out.println("Connecting to Database...\n");
+
+				for (TransactionResult result : results) {
+
+				    if (result.getStatus() == TransactionStatus.SUCCESS) {
+
+				        System.out.println( "Transaction "+ result.getTransactionId()+ " : SUCCESS");
+
+				    } else {
+
+				        System.out.println("Transaction "+ result.getTransactionId()+ " : FAILED ("+ result.getFailureReason()+ ")"
+				        );
+				    }
+				}
+                 System.out.println();
+				System.out.println("Database Commit Successful\n");
+
+
+				FileProcessingSummary summary = new FileProcessingSummary();
 
 			   summary.setTotalRecords(results.size());
 
