@@ -8,7 +8,7 @@ import com.iispl.exception.InvalidXmlStructureException;
 import com.iispl.model.TransactionRequest;
 
 public class ValidationService {
-
+   
 	public void validateXmlStructure(TransactionRequest transaction)
 			throws InvalidXmlStructureException {
 
@@ -95,7 +95,7 @@ public class ValidationService {
 		}
 
 	}
-
+	//validate the Transaction requests (XML structure)
 	public void validateTransaction(TransactionRequest transaction,
 			String fileCorporateId,
 			String xmlCorporateId)

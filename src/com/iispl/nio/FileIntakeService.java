@@ -22,7 +22,7 @@ public class FileIntakeService {
 		Files.createDirectories(incoming);
 		Files.createDirectories(processing);
 	}
-	
+	//validate the file and move it to processing Folder for parsing
 	public Path getFileForProcessing() throws IOException, InvalidFileNameException,InvalidInputFileException{
 		try(DirectoryStream<Path> stream=Files.newDirectoryStream(incoming,"*.xml")){
 			for(Path file:stream) {
@@ -49,7 +49,7 @@ public class FileIntakeService {
 		}
 		return null;
 	}
-	
+	//check if the file name is valid
 	private boolean isValidFileName(String fileName) {
 
         return fileName.matches(
