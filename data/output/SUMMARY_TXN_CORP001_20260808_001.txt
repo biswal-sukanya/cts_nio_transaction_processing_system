@@ -1,7 +1,7 @@
 CTS BULK TRANSACTION PROCESSING SUMMARY
 --------------------------------------
 Total Records      : 3
-Processed Records  : 1
-Failed Records     : 2
+Processed Records  : 2
+Failed Records     : 1
 Response Generated : true
 Archived           : true
