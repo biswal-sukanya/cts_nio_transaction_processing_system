@@ -17,7 +17,7 @@ import com.iispl.model.TransactionResult;
 public class ResponseFileWriter {
 
     private static final Path OUTPUT_FOLDER = Paths.get("data", "output");
-
+    //write to the response file using File channel and Byte Buffer
     public void writeResponseFile(String batchId,String originalFileName,List<TransactionResult> results) throws IOException {
 
       Files.createDirectories(OUTPUT_FOLDER);
@@ -64,6 +64,7 @@ public class ResponseFileWriter {
 
                  System.out.println("Last Modified      : "+ attributes.lastModifiedTime());
 }
+    //Write the Processing Summary to a file
                public void writeSummaryFile(String originalFileName,FileProcessingSummary summary) throws IOException {
 
                 Files.createDirectories(OUTPUT_FOLDER);

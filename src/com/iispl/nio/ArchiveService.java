@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 public class ArchiveService {
-
+	//move to archive after processing
     public void moveToArchive(Path processedFile,Path archiveFolder) throws IOException {
 
         Files.createDirectories(archiveFolder);
@@ -17,7 +17,7 @@ public class ArchiveService {
 
         System.out.println("File moved to Archive.");
     }
-
+    //move to rejected folder if file is rejected
     public void moveToRejected(Path processedFile, Path rejectedFolder) throws IOException {
 
         Files.createDirectories(rejectedFolder);

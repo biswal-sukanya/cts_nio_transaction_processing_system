@@ -22,7 +22,7 @@ public class TransactionService {
 		transactionDao = new TransactionDaoImpl();
 
 	}
-
+    //Process all the Transactions 
 	public List<TransactionResult> processTransactions(String batchId,List<TransactionRequest> transactionRequests) {
 
 		List<TransactionResult> transactionResults = new ArrayList<>();

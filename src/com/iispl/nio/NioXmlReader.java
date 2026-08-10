@@ -41,7 +41,7 @@ public class NioXmlReader {
 
 		return parseTransactions(xmlContent, fileCorporateId);
 	}
-
+	//Read file content using File channel and Byte buffer and return xml content as string
 	private String readFile(Path filePath) throws IOException {
 
 		StringBuilder xmlContent = new StringBuilder();
@@ -62,7 +62,7 @@ public class NioXmlReader {
 
 		return xmlContent.toString();
 	}
-
+ //parse the xml file for transactions using DOM 
 	private List<TransactionRequest> parseTransactions(String xmlContent,String fileCorporateId)throws Exception {
 
 		List<TransactionRequest> transactionList = new ArrayList<>();
