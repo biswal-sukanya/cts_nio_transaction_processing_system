@@ -14,8 +14,8 @@ public interface AccountDao {
 
 	    Account getAccountByAccountNumber(String accountNumber);
 
-	    boolean debitAmount(String accountNumber, BigDecimal amount);
+	    boolean isDebitedAmount(String accountNumber, BigDecimal amount);
 
-	    boolean creditAmount(String accountNumber, BigDecimal amount);
+	    boolean isCreditedAmount(String accountNumber, BigDecimal amount);
 	
 }

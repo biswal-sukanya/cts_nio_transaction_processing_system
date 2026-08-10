@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response batchId="0ac8b930-33df-4b2b-8af1-b1f9bfee5518">
+	<transaction>
+		<transactionId>TXN1001</transactionId>
+		<status>FAILED</status>
+		<failureCode>A001</failureCode>
+		<failureReason>Source Account Not Found</failureReason>
+	</transaction>
+	<transaction>
+		<transactionId>TXN1002</transactionId>
+		<status>SUCCESS</status>
+		<failureCode></failureCode>
+		<failureReason></failureReason>
+	</transaction>
+	<transaction>
+		<transactionId>TXN1003</transactionId>
+		<status>SUCCESS</status>
+		<failureCode></failureCode>
+		<failureReason></failureReason>
+	</transaction>
+</response>
