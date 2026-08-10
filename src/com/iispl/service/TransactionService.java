@@ -129,7 +129,7 @@ public class TransactionService {
 
 			}
 			
-			boolean debitSuccess = accountDao.debitAmount(request.getFromAccount(),request.getAmount());
+			boolean debitSuccess = accountDao.isDebitedAmount(request.getFromAccount(),request.getAmount());
 
 			if (!debitSuccess) {
 
@@ -147,7 +147,7 @@ public class TransactionService {
 
 			/* Credit Destination Account */
 
-			boolean creditSuccess = accountDao.creditAmount(request.getToAccount(),request.getAmount());
+			boolean creditSuccess = accountDao.isCreditedAmount(request.getToAccount(),request.getAmount());
 
 			if (!creditSuccess) {
 

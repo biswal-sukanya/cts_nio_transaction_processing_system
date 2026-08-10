@@ -14,13 +14,17 @@ import com.iispl.exception.InvalidInputFileException;
 public class FileIntakeService {
 	private final Path incoming;
 	private final Path processing;
+	private final Path rejected;
 	
 	public FileIntakeService()throws IOException{
 		incoming=Paths.get("data","incoming");
 		processing=Paths.get("data","processing");
+		rejected = Paths.get("data","rejected");
+		
 		
 		Files.createDirectories(incoming);
 		Files.createDirectories(processing);
+		Files.createDirectories(rejected);
 	}
 	//validate the file and move it to processing Folder for parsing
 	public Path getFileForProcessing() throws IOException, InvalidFileNameException,InvalidInputFileException{
@@ -29,14 +33,30 @@ public class FileIntakeService {
 				BasicFileAttributes attribute=Files.readAttributes(file,BasicFileAttributes.class);
 				
 				if(!attribute.isRegularFile()) {
-					throw new InvalidInputFileException();
+					
+					Path rejectedFile = rejected.resolve(file.getFileName());
+					Files.move(file, rejectedFile,StandardCopyOption.REPLACE_EXISTING);
+					
+					System.out.println("Invalid Input file Moved to rejected: "+file.getFileName()+"\n");
+					continue;
 				}
 				if(attribute.size()==0) {
-					throw new InvalidInputFileException();
+					
+					Path rejectedFile = rejected.resolve(file.getFileName());
+					Files.move(file, rejectedFile,StandardCopyOption.REPLACE_EXISTING);
+					
+					System.out.println("Empty Input file Moved to rejected: "+file.getFileName()+"\n");
+					continue;
 				}
 				
 				if(!isValidFileName(file.getFileName().toString())) {
-					throw new InvalidFileNameException();
+					
+					Path rejectedFile = rejected.resolve(file.getFileName());
+					
+					Files.move(file, rejectedFile,StandardCopyOption.REPLACE_EXISTING);
+					
+					System.out.println("file Moved to rejected: "+file.getFileName()+" ( Invalid File Name )"+"\n");
+					continue;
 				}
 				
 				Path target=processing.resolve(file.getFileName());

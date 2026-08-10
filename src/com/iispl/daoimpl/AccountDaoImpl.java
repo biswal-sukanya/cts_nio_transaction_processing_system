@@ -152,7 +152,7 @@ public class AccountDaoImpl implements AccountDao {
 	}
 	
 	@Override
-	public boolean debitAmount(String accountNumber,BigDecimal amount) {
+	public boolean isDebitedAmount(String accountNumber,BigDecimal amount) {
 
 		String sql = "UPDATE account SET balance = balance - ? WHERE account_number = ?";
 
@@ -176,7 +176,7 @@ public class AccountDaoImpl implements AccountDao {
 	}
 
 	@Override
-	public boolean creditAmount(String accountNumber,BigDecimal amount) {
+	public boolean isCreditedAmount(String accountNumber,BigDecimal amount) {
 
 		String sql ="UPDATE account SET balance = balance + ? WHERE account_number = ?";
 

@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.iispl.dao.FileProcessingDao;
 import com.iispl.daoimpl.FileProcessingDaoImpl;
 import com.iispl.enums.TransactionStatus;
+import com.iispl.exception.InvalidFileNameException;
 import com.iispl.model.FileProcessingSummary;
 import com.iispl.model.TransactionRequest;
 import com.iispl.model.TransactionResult;
@@ -33,7 +34,13 @@ public class CTSBatchApplication {
 
 			   FileProcessingDao fileProcessingDao =  new FileProcessingDaoImpl();
 
-			   Path processedFile = intakeService.getFileForProcessing();
+			   Path processedFile=null;
+			try {
+				processedFile = intakeService.getFileForProcessing();
+			} catch (InvalidFileNameException e) {
+				
+				System.out.println(e.getMessage());
+			}
 
 			   if (processedFile == null) {
 
