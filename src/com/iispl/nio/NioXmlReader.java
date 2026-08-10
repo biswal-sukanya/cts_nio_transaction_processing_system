@@ -73,7 +73,7 @@ public class NioXmlReader {
 
 		Document document = builder.parse(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8)));
 
-		
+        document.getDocumentElement().normalize();		
 
 		Element root = document.getDocumentElement();
 
