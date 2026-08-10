@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<response batchId="67bd29e0-ba0b-4ddc-a172-db176209a2e1">
-
+<response batchId="85ccaa9c-9751-48d4-baa4-279c0c668919">
 	<transaction>
 		<transactionId>TXN1001</transactionId>
 		<status>FAILED</status>
@@ -10,14 +8,14 @@
 	</transaction>
 	<transaction>
 		<transactionId>TXN1002</transactionId>
-		<status>SUCCESS</status>
-		<failureCode></failureCode>
-		<failureReason></failureReason>
+		<status>FAILED</status>
+		<failureCode>T001</failureCode>
+		<failureReason>Duplicate Transaction</failureReason>
 	</transaction>
 	<transaction>
 		<transactionId>TXN1003</transactionId>
-		<status>SUCCESS</status>
-		<failureCode></failureCode>
-		<failureReason></failureReason>
+		<status>FAILED</status>
+		<failureCode>T001</failureCode>
+		<failureReason>Duplicate Transaction</failureReason>
 	</transaction>
 </response>
