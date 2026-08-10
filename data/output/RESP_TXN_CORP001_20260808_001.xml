@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <response batchId="67bd29e0-ba0b-4ddc-a172-db176209a2e1">
+
 	<transaction>
 		<transactionId>TXN1001</transactionId>
 		<status>FAILED</status>
