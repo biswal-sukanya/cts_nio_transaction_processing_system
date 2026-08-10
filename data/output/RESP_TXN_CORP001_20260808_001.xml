@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<response batchId="93b15433-6924-4466-9d5e-fb785ee2d937">
+<response batchId="97b9aad2-efe1-4f2f-806a-ce06484312cf">
 	<transaction>
 		<transactionId>TXN1001</transactionId>
 		<status>FAILED</status>
@@ -8,9 +8,9 @@
 	</transaction>
 	<transaction>
 		<transactionId>TXN1002</transactionId>
-		<status>FAILED</status>
-		<failureCode>A005</failureCode>
-		<failureReason>Insufficient Balance</failureReason>
+		<status>SUCCESS</status>
+		<failureCode></failureCode>
+		<failureReason></failureReason>
 	</transaction>
 	<transaction>
 		<transactionId>TXN1003</transactionId>

@@ -150,9 +150,7 @@ public class NioXmlReader {
 	                        | InvalidXmlStructureException e) {
 
 	                	System.out.println(e.getMessage());
-	                    // For now just continue.
-	                    // Later in TransactionService we will create
-	                    // a TransactionResult with FAILED status.
+	                   
 
 	                    continue;
 	                }
