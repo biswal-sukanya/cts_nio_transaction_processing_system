@@ -14,8 +14,13 @@ public class ArchiveService {
         Files.move(processedFile,
                 archiveFolder.resolve(processedFile.getFileName()),
                 StandardCopyOption.REPLACE_EXISTING);
-
-        System.out.println("File moved to Archive.");
+        
+        System.out.println("----------------------------------------------------------------");
+        System.out.println("Archive");
+        System.out.println("----------------------------------------------------------------");
+        System.out.println("Moving XML to archive/");
+        System.out.println("Archive Successful");
+        System.out.println();
     }
     //move to rejected folder if file is rejected
     public void moveToRejected(Path processedFile, Path rejectedFolder) throws IOException {
