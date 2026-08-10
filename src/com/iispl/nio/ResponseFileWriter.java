@@ -56,13 +56,19 @@ public class ResponseFileWriter {
                   channel.write(buffer);
 }
 
-                 System.out.println("Response XML Created Successfully.");
-
+                 System.out.println();
+                 System.out.println("----------------------------------------------------------------");
+                 System.out.println("Response File Generation");
+                 System.out.println("----------------------------------------------------------------");
+                 System.out.println("Creating Response XML...");
+                 System.out.println(responseFileName+" "+"created");
+                 System.out.println();
                  BasicFileAttributes attributes =Files.readAttributes(responsePath,BasicFileAttributes.class);
 
                  System.out.println("Response File Size : "+ attributes.size() + " bytes");
 
                  System.out.println("Last Modified      : "+ attributes.lastModifiedTime());
+                 System.out.println();
 }
     //Write the Processing Summary to a file
                public void writeSummaryFile(String originalFileName,FileProcessingSummary summary) throws IOException {
