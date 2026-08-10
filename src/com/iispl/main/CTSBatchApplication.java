@@ -59,7 +59,7 @@ public class CTSBatchApplication {
 
 				System.out.println();
 				System.out.println("------------------------------------------------------------");
-				System.out.println("3. Database Update");
+				System.out.println("   Database Update");
 				System.out.println("------------------------------------------------------------");
 
 				System.out.println("Connecting to Database...\n");
